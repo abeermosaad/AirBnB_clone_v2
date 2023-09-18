@@ -126,7 +126,8 @@ class HBNBCommand(cmd.Cmd):
         storage.save()
         for arg in list_of_args[1:]:
             parameter = arg.split('=')
-            if (len(parameter) == 2):
+            # print(len(parameter), parameter)
+            if (len(parameter) == 2 and parameter[0] and parameter[1]):
                 if (parameter[1][0] == '\"'):
                     value = parameter[1][1:-1].replace('_', ' ')
                 elif ('.' in parameter[1]):
@@ -136,6 +137,8 @@ class HBNBCommand(cmd.Cmd):
                 else:
                     continue
                 setattr(new_instance, parameter[0], value)
+            else:
+                continue
         print(new_instance.id)
         storage.save()
 
