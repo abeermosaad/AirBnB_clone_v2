@@ -132,10 +132,11 @@ class HBNBCommand(cmd.Cmd):
                     value = parameter[1][1:-1].replace('_', ' ')
                 elif ('.' in parameter[1]):
                     value = float(parameter[1])
-                elif ((parameter[1]).isdigit()):
-                    value = int(parameter[1])
                 else:
-                    continue
+                    try:
+                        value = int(parameter[1])
+                    except:
+                        continue
                 setattr(new_instance, parameter[0], value)
             else:
                 continue
