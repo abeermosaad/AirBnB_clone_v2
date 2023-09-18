@@ -131,8 +131,10 @@ class HBNBCommand(cmd.Cmd):
                     value = parameter[1][1:-1].replace('_', ' ')
                 elif ('.' in parameter[1]):
                     value = float(parameter[1])
-                else:
+                elif ((parameter[1]).isdigit()):
                     value = int(parameter[1])
+                else:
+                    continue
                 setattr(new_instance, parameter[0], value)
         print(new_instance.id)
         storage.save()
