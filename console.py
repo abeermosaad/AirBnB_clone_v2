@@ -115,15 +115,14 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
-        list_of_args = args.split()
         if not args:
             print("** class name missing **")
             return
-        elif list_of_args[0] not in HBNBCommand.classes:
+        list_of_args = args.split()
+        if list_of_args[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
         new_instance = HBNBCommand.classes[list_of_args[0]]()
-        storage.save()
         for arg in list_of_args[1:]:
             parameter = arg.split('=')
             try:
@@ -142,7 +141,7 @@ class HBNBCommand(cmd.Cmd):
                     continue
             except IndexError:
                 continue
-        storage.save()
+        new_instance.save()
         print(new_instance.id)
 
     def help_create(self):
