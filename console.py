@@ -126,22 +126,24 @@ class HBNBCommand(cmd.Cmd):
         storage.save()
         for arg in list_of_args[1:]:
             parameter = arg.split('=')
-            # print(len(parameter), parameter)
-            if (len(parameter) == 2 and parameter[0] and parameter[1]):
-                if (parameter[1][0] == '\"'):
-                    value = parameter[1][1:-1].replace('_', ' ')
-                elif ('.' in parameter[1]):
-                    value = float(parameter[1])
+            try:
+                if (len(parameter) == 2 and parameter[0] and parameter[1]):
+                    if (parameter[1][0] == '\"' and parameter[1][-1] == '\"'):
+                        value = parameter[1][1:-1].replace('_', ' ')
+                    elif ('.' in parameter[1]):
+                        value = float(parameter[1])
+                    else:
+                        try:
+                            value = int(parameter[1])
+                        except ValueError:
+                            continue
+                    setattr(new_instance, parameter[0], value)
                 else:
-                    try:
-                        value = int(parameter[1])
-                    except:
-                        continue
-                setattr(new_instance, parameter[0], value)
-            else:
+                    continue
+            except IndexError:
                 continue
-        print(new_instance.id)
         storage.save()
+        print(new_instance.id)
 
     def help_create(self):
         """ Help information for the create method """
