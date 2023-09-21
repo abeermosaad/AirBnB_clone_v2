@@ -26,5 +26,8 @@ class Place(BaseModel, Base):
     if getenv('HBNB_TYPE_STORAGE') != 'db':
         @property
         def reviews(self):
-            return [review for review in self.reviews
-                    if review.place_id == self.id]
+            new_list = []
+            for review in self.reviews:
+                if review.place_id == self.id:
+                    new_list.append(review)
+            return new_list
