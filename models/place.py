@@ -21,8 +21,8 @@ class Place(BaseModel, Base):
     latitude = Column(Float)
     longitude = Column(Float)
     amenity_ids = []
-    reviews = relationship("Review", backref="place",
-                           cascade="all, delete-orphan")
+    # reviews = relationship("Review", backref="place",
+    #                        cascade="all, delete-orphan")
     # if getenv('HBNB_TYPE_STORAGE') != 'db':
     #     @property
     #     def reviews(self):
