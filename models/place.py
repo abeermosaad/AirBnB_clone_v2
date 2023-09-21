@@ -29,5 +29,5 @@ class Place(BaseModel, Base):
         def reviews(self):
             """Getter method to retrieve related Review instances."""
             from models import storage
-            all_reviews = storage.all(Review)
-            return [review for review in all_reviews.values() if review.place_id == self.id]
+            dic = storage.all('Review')
+            return [].append(v for k, v in dic.items() if self.id == v['place_id'])
