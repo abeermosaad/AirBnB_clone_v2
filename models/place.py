@@ -23,11 +23,11 @@ class Place(BaseModel, Base):
     amenity_ids = []
     reviews = relationship("Review", backref="place",
                            cascade="all, delete-orphan")
-    if getenv('HBNB_TYPE_STORAGE') != 'db':
-        @property
-        def reviews(self):
-            new_list = []
-            for review in self.reviews:
-                if review.place_id == self.id:
-                    new_list.append(review)
-            return new_list
+    # if getenv('HBNB_TYPE_STORAGE') != 'db':
+    #     @property
+    #     def reviews(self):
+    #         new_list = []
+    #         for review in self.reviews:
+    #             if review.place_id == self.id:
+    #                 new_list.append(review)
+    #         return new_list
