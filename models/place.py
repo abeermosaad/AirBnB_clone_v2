@@ -1,11 +1,17 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, String, Integer, Float, ForeignKey
+from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship
 import os
 from models.review import Review
+from models.amenity import Amenity
 
+
+place_amenity = Table('place_amenity', Base.metadata,
+    Column('place_id', String(60), ForeignKey('places.id'), primarykey=True),
+    Column('amenity_id', String(60), ForeignKey('amenities.id'), primarykey=True)
+)
 
 class Place(BaseModel, Base):
     """ A place to stay """
@@ -24,6 +30,7 @@ class Place(BaseModel, Base):
     amenity_ids = []
     reviews = relationship("Review", backref="place",
                            cascade="all, delete-orphan")
+    amenities = relationship("Amenity", secondary=place_amenity, viewonly=False)
     if os.environ['HBNB_ENV'] != 'db':
         @property
         def reviews(self):
@@ -31,3 +38,13 @@ class Place(BaseModel, Base):
             from models import storage
             dic = storage.all('Review')
             return [].append(v for k, v in dic.items() if self.id == v['place_id'])
+        @property
+        def amenities(self):
+            """Getter method to retrieve related Amenity instances."""
+            from models import storage
+            dic = storage.all('Amenity')
+            return [].append(v for k, v in dic.items() if self.id == v['amenity_ids'])
+        @amenities.setter
+        def amenities(self, obj):
+            if isinstance(obj, Amenity):
+                self.amenity_ids.append(obj.id)
