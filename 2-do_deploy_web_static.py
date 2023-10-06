@@ -1,15 +1,17 @@
 #!/usr/bin/python3
+"""Deploying"""
 from fabric.api import *
 from datetime import datetime
 import os
-"""Deploying"""
 
 
 env.hosts = ['34.202.164.217', '100.26.230.167']
+env.user = "ubuntu"
 
 
+@task
 def do_deploy(archive_path):
-    """Deploy web_static"""
+    """Deploy archive"""
     if not os.path.exists(archive_path):
         return (False)
     try:
