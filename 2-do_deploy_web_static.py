@@ -9,26 +9,39 @@ env.hosts = ['34.202.164.217', '100.26.230.167']
 env.user = "ubuntu"
 
 
-@task
+def do_pack():
+    """Generates a .tgz archive"""
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+    archive_name = f"versions/web_static_{timestamp}.tgz"
+    try:
+        local("mkdir -p versions")
+        local(f"tar -cvzf {archive_name} web_static")
+        return archive_name
+    except Exception:
+        return None
+
+
 def do_deploy(archive_path):
     """Deploy archive"""
     if not os.path.exists(archive_path):
         return (False)
+
     try:
-        put(archive_path, '/tmp/')
         li = archive_path.split('/')
         file_name = li[-1]
-        run(f'mkdir -p /data/web_static/releases/{file_name[:-4]}')
-        run(f'tar -xzf /tmp/{file_name} -C \
-            /data/web_static/releases/{file_name[:-4]}')
-        run(f'rm /tmp/{file_name}')
-        run(f'mv /data/web_static/releases/{file_name[:-4]}/web_static/* \
-                /data/web_static/releases/{file_name[:-4]}/')
-        run(f'rm -rf /data/web_static/releases/{file_name[:-4]}/web_static')
-        run('rm -rf /data/web_static/current')
-        run(f'ln -s /data/web_static/releases/{file_name[:-4]}/ \
-                /data/web_static/current')
-        print('New version deployed!')
+
+        path_of_releases = f"/data/web_static/releases/{file_name[:-4]}/"
+        path_of_tmp = f"/tmp/{file_name}"
+
+        put(archive_path, "/tmp/")
+        run(f"mkdir -p {path_of_releases}")
+        run(f"tar -xzf {path_of_tmp} -C {path_of_releases}")
+        run(f"rm {path_of_tmp}")
+        run(f"mv {path_of_releases}web_static/* {path_of_releases}")
+        run(f"rm -rf {path_of_releases}web_static")
+        run(f"rm -rf /data/web_static/current")
+        run(f"ln -s {path_of_releases} /data/web_static/current")
+        print("New version deployed!")
         return (True)
     except Exception:
         return (False)
