@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Setup for web servers for the deployment of web_static
+# Setup of web servers for the deployment of web_static
 
 if ! command -v nginx &>/dev/null; then
     sudo apt-get update
