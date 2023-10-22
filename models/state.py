@@ -3,6 +3,7 @@
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, Integer
 from sqlalchemy.orm import relationship
+import os
 
 
 class State(BaseModel, Base):
@@ -13,8 +14,9 @@ class State(BaseModel, Base):
     cities = relationship("City", backref="state",
                           cascade="all, delete-orphan")
 
-    @property
-    def cities(self):
-        from models import storage
-        dic = storage.all('City')
-        return [].append(v for k, v in dic.items() if self.id == v['state_id'])
+    if os.environ['HBNB_ENV'] != 'db':
+        @property
+        def cities(self):
+            from models import storage
+            dic = storage.all('City')
+            return [].append(v for k, v in dic.items() if self.id == v['state_id'])

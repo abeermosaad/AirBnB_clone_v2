@@ -41,7 +41,11 @@ class DBStorage():
                 dic[f"{r.__class__.__name__}.{r.id}"] = r
             return (dic)
         else:
-            result = self.__session.query(eval(cls)).all()
+            if (isinstance(cls, str)):
+                result = self.__session.query(eval(cls)).all()
+            else:
+                result = self.__session.query(cls).all()
+
             for r in result:
                 dic[f"{r.__class__.__name__}.{r.id}"] = r
             return (dic)
@@ -65,3 +69,7 @@ class DBStorage():
         from models.amenity import Amenity
         from models.review import Review
         Base.metadata.create_all(self.__engine)
+
+    def close(self):
+        (self.__session).remove()
+        # Session.close()
